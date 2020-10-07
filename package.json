@@ -54,5 +54,12 @@
     "*.{js,ts}": [
       "npm run lint:staged"
     ]
+  },
+  "dependencies": {
+    "@microsoft/microsoft-graph-client": "^2.0.0",
+    "discord.js": "^12.3.1",
+    "dotenv": "^8.2.0",
+    "isomorphic-fetch": "^3.0.0",
+    "querystring": "^0.2.0"
   }
 }
