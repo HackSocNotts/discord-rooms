@@ -5,7 +5,7 @@ import { updateChannelName } from './services/discord';
 
 const calendar = new Calendar();
 
-const update = async () => {
+export const update = async (): Promise<void> => {
   try {
     const now = DateTime.local();
     const nextEvent = await calendar.getNextEvent();
