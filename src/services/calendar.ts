@@ -56,6 +56,7 @@ class Calendar {
           start: DateTime.fromISO(item.start.dateTime, { zone: item.start.timeZone }),
           end: DateTime.fromISO(item.end.dateTime, { zone: item.end.timeZone }),
         }))
+        .filter((item) => item.end.valueOf() > DateTime.local().valueOf())
         .sort((a, b) => a.start.valueOf() - b.start.valueOf());
 
       if (!events.length) {
