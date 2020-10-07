@@ -40,5 +40,26 @@ const update = async () => {
     process.exit(1);
   }
 };
-update();
-setInterval(update, 1 * 60 * 1000);
+
+let intervalId: NodeJS.Timeout;
+
+const reset = () => {
+  if (intervalId) {
+    clearInterval(intervalId);
+  }
+
+  const now = new Date();
+  const interval = 60 * 1000;
+  const delay = interval - (now.valueOf() % interval);
+
+  const start = () => {
+    update();
+    intervalId = setInterval(update, interval);
+  };
+
+  setTimeout(start, delay);
+};
+
+setInterval(reset, 4 * 60 * 60 * 1000);
+
+reset();
