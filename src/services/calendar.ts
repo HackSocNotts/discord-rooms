@@ -1,5 +1,6 @@
 import 'isomorphic-fetch';
 import { AuthenticationProvider, Client } from '@microsoft/microsoft-graph-client';
+import { DateTime } from 'luxon';
 import qs from 'querystring';
 
 class InternalAuthenticationProvider implements AuthenticationProvider {
@@ -41,6 +42,27 @@ class Calendar {
     try {
       const events = await this.client.api(`/users/${process.env.MICROSOFT_PRINCIPLE_NAME}/calendar/events`).get();
       return events;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  public async getNextEvent(): Promise<{ organizer: string; start: DateTime; end: DateTime } | null> {
+    try {
+      const rawEvents = await this.getCalendarEvents();
+      const events = rawEvents.value
+        .map((item) => ({
+          organizer: item.subject,
+          start: DateTime.fromISO(item.start.dateTime, { zone: item.start.timeZone }),
+          end: DateTime.fromISO(item.end.dateTime, { zone: item.end.timeZone }),
+        }))
+        .sort((a, b) => a.start.valueOf() - b.start.valueOf());
+
+      if (!events.length) {
+        return null;
+      }
+
+      return events[0];
     } catch (error) {
       throw error;
     }
