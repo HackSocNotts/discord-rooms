@@ -4,7 +4,9 @@ const client = new Client();
 
 export const updateChannelName = async (newName: string): Promise<void> => {
   try {
-    await client.login(process.env.DISCORD_BOT_TOKEN);
+    if (!client.user) {
+      await client.login(process.env.DISCORD_BOT_TOKEN);
+    }
     const channel = (await client.channels.fetch(process.env.DISCORD_CHANNEL_ID as string)) as VoiceChannel;
     if (channel.type != 'voice') {
       throw new Error('Channel is not a voice channel');
